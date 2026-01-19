@@ -92,7 +92,6 @@ export default function Home() {
 
       <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800 transition-all">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <span className="font-bold text-xl tracking-tighter text-cyan-400">Azriel.<span className="text-white">Dev</span></span>
           <div className="hidden md:flex gap-8 text-sm font-medium text-slate-400">
             <a href="#about" onClick={(e) => handleScroll(e, "about")} className="hover:text-cyan-400 transition-colors cursor-pointer">About</a>
             <a href="#skills" onClick={(e) => handleScroll(e, "skills")} className="hover:text-cyan-400 transition-colors cursor-pointer">Skills</a>
