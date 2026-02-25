@@ -1,13 +1,15 @@
 "use client";
 
+import React, { useState } from "react";
 import ParticleBackground from "@/components/ParticleBackground";
 import Typewriter from "@/components/Typewriter";
 import { FadeIn } from "@/components/Animations";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Github, Linkedin, Mail, ExternalLink, 
   Code2, Terminal, Database, 
-  BookOpen, GraduationCap, MapPin, Briefcase, Server
+  BookOpen, GraduationCap, MapPin, Briefcase, Server,
+  Award, X
 } from "lucide-react";
 
 const personalInfo = {
@@ -29,6 +31,30 @@ const skills = [
   { category: "Frontend", items: ["JavaScript (ES6+)", "Tailwind CSS", "Next.js", "Flutter"] },
   { category: "Database", items: ["MySQL", "MariaDB", "Database Design"] },
   { category: "Tools", items: ["Git", "Composer", "VS Code", "Vercel", "Postman"] },
+];
+
+const achievements = [
+  {
+    title: "Medali Emas Matematika - KSB",
+    issuer: "Braindicator Indonesia",
+    year: "2024",
+    desc: "Meraih Medali Emas dengan predikat A+ pada ajang kompetisi tingkat nasional (Kompetisi Siswa Braindicator) bidang Matematika.",
+    image: "/certificates/ksbmtk2024.jpg"
+  },
+  {
+    title: "Medali Emas Informatika - KSB",
+    issuer: "Braindicator Indonesia",
+    year: "2024",
+    desc: "Meraih Medali Emas dengan predikat A+ pada ajang kompetisi tingkat nasional (Kompetisi Siswa Braindicator) bidang Informatika.",
+    image: "/certificates/ksbif2024.jpg"
+  },
+  {
+    title: "Medali Emas Matematika - ISMO",
+    issuer: "Braindicator Indonesia",
+    year: "2024",
+    desc: "Meraih Medali Emas dengan predikat A+ pada ajang kompetisi tingkat nasional (Indonesian Science And Medical Olympiad) bidang Matematika.",
+    image: "/certificates/ismomtk2024.jpg"
+  }
 ];
 
 const timeline = [
@@ -74,6 +100,7 @@ const projects = [
 ];
 
 export default function Home() {
+  const [selectedImg, setSelectedImg] = useState<string | null>(null);
   
   const handleScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) => {
     e.preventDefault(); 
@@ -87,14 +114,38 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen text-slate-200 selection:bg-cyan-500/30 selection:text-cyan-200">
+    <main className="min-h-screen text-slate-200 selection:bg-cyan-500/30 selection:text-cyan-200 bg-slate-950">
       <ParticleBackground />
+
+      <AnimatePresence>
+        {selectedImg && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedImg(null)}
+            className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4 cursor-zoom-out"
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              className="relative max-w-4xl w-full"
+            >
+              <button className="absolute -top-12 right-0 text-white hover:text-cyan-400 transition-colors">
+                <X size={32} />
+              </button>
+              <img src={selectedImg} alt="Certificate" className="w-full h-auto rounded-lg shadow-2xl border border-slate-800" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <nav className="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-slate-950/70 border-b border-slate-800 transition-all">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="hidden md:flex gap-8 text-sm font-medium text-slate-400">
             <a href="#about" onClick={(e) => handleScroll(e, "about")} className="hover:text-cyan-400 transition-colors cursor-pointer">About</a>
             <a href="#skills" onClick={(e) => handleScroll(e, "skills")} className="hover:text-cyan-400 transition-colors cursor-pointer">Skills</a>
+            <a href="#achievements" onClick={(e) => handleScroll(e, "achievements")} className="hover:text-cyan-400 transition-colors cursor-pointer text-cyan-500">Achievements</a>
             <a href="#projects" onClick={(e) => handleScroll(e, "projects")} className="hover:text-cyan-400 transition-colors cursor-pointer">Projects</a>
           </div>
           <a href={`mailto:${personalInfo.email}`} className="px-4 py-2 text-xs font-bold border border-slate-700 rounded-full hover:bg-cyan-500 hover:text-black transition-all">
@@ -103,6 +154,7 @@ export default function Home() {
         </div>
       </nav>
 
+      {/* HERO SECTION */}
       <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20 relative z-10">
         <FadeIn delay={0.1}>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/50 border border-slate-700 text-cyan-400 text-xs font-mono mb-6">
@@ -136,9 +188,9 @@ export default function Home() {
         </FadeIn>
       </section>
 
+      {/* ABOUT SECTION */}
       <section id="about" className="py-24 bg-slate-950/80 relative z-10">
         <div className="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16">
-          
           <div>
              <FadeIn>
               <h2 className="text-3xl font-bold mb-6 flex items-center gap-2">
@@ -189,10 +241,10 @@ export default function Home() {
               </div>
             </FadeIn>
           </div>
-
         </div>
       </section>
 
+      {/* SKILLS SECTION */}
       <section id="skills" className="py-24 bg-slate-900/30 relative z-10 border-y border-slate-900">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn>
@@ -226,11 +278,56 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ACHIEVEMENTS SECTION (MODIFIED) */}
+      <section id="achievements" className="py-24 bg-slate-950/80 relative z-10 border-b border-slate-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <FadeIn>
+            <h2 className="text-3xl font-bold mb-12 flex items-center gap-3">
+              <span className="text-cyan-400">03.</span> Achievements & Certifications
+            </h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {achievements.map((item, index) => (
+              <FadeIn key={index} delay={index * 0.1}>
+                <motion.div 
+                  whileHover={{ y: -5 }}
+                  onClick={() => setSelectedImg(item.image)}
+                  className="group p-6 bg-slate-900 border border-slate-800 rounded-2xl hover:border-cyan-500/50 transition-all flex gap-5 items-start cursor-pointer"
+                >
+                  <div className="p-3 bg-slate-950 rounded-xl text-cyan-400 border border-slate-800 group-hover:bg-cyan-500 group-hover:text-slate-950 transition-all flex-shrink-0">
+                    <Award size={24} />
+                  </div>
+                  
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-mono text-cyan-500">{item.year}</span>
+                      <span className="text-slate-700">•</span>
+                      <span className="text-xs font-medium text-slate-500 uppercase tracking-wider">{item.issuer}</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-100 group-hover:text-cyan-400 transition-colors mb-2">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-slate-400 leading-relaxed">
+                      {item.desc}
+                    </p>
+                    <div className="mt-4 inline-flex items-center gap-1 text-xs text-cyan-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                      Click to view certificate <ExternalLink size={12}/>
+                    </div>
+                  </div>
+                </motion.div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* PROJECTS SECTION */}
       <section id="projects" className="py-24 bg-slate-950/80 relative z-10">
         <div className="max-w-6xl mx-auto px-6">
           <FadeIn>
             <h2 className="text-3xl font-bold mb-12 flex items-center gap-3">
-              <span className="text-cyan-400">03.</span> Featured Projects
+              <span className="text-cyan-400">04.</span> Featured Projects
             </h2>
           </FadeIn>
 
